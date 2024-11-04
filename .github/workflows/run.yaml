@@ -2,7 +2,11 @@ name: text
 
 on:
   schedule:
-    - cron: '2 */6 * * *'  
+    - cron: '42 */6 * * *' 
+  push:
+    branches:
+      - main
+      - newtest
   workflow_dispatch:  
 
 jobs:
