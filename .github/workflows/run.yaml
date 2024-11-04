@@ -3,6 +3,11 @@ name: textforusual
 on:
   schedule:
     - cron: '15 */6 * * *'  
+
+  push:
+    branches:
+      - main
+      - newtest
   workflow_dispatch:  
 
 jobs:
