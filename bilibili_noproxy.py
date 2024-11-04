@@ -3,21 +3,27 @@ import requests
 import time
 import random
 import os
+import re
 
 
 # BVID放这里 格式: ["视频1id","视频2id","视频3id"...], BV号获取 https://www.bilibili.com/video/{这里就是BVID}/
 
 
 
-bvids = ["BV1cxxQeMEHz","BV1Xhx1ezEad","BV1gZ1BYmEKM","BV1sRsaeXEdr","BV1E6HheYEvC","BV1CfCQYiEk1"]
+bvids = []
 
-# bvids_bilibili = os.getenv("bvids_bilibili")
-# bvids_bilibili = bvids_bilibili.replace('"','')
+# bvids_bilibili_un = os.getenv("bvids_bilibili_un")
 
-# if bvids_bilibili :
-#     new_bvids = bvids_bilibili.split(",")
-#     bvids.extend(new_bvids)
-#     print(bvids)
+bvids_bilibili_un = "BV1fC17YiETa,BV1zp1TYgEL5,BV1h514Y7En8 ,BV1YFyUYVEBm ,BV1uS1FYzErs ,BV1saypYxEcq ,BV1BDyLYFEar ,BV1H9yhYVEJo ,BV1bHCUYNET2 ,BV1wryPYqE6J ,BV1gzmMYKEiS ,BV1NS2oYfENk ,BV1g5mjYsEuR ,BV1yc2rYjE7s ,BV1yC2aYdEon ,BV1iZ28YBEZf ,BV1Tb2UY3EL3 ,BV1Qc2SYEEBK ,BV1rE2VYwEai ,BV1U12PYDErq ,BV14c2pYeESF ,BV17G1yYkE8g ,BV1eo19YYEDp ,BV1m34AejE4j ,BV1uW4FerEYN ,BV1cxxQeMEPB,BV12x4uecEhu"
+
+
+
+# bvids_bilibili_un = bvids_bilibili_un.replace('"','')
+bvids_bilibili_un = re.sub(r"[\s'\"]+", '', bvids_bilibili_un)
+if bvids_bilibili_un :
+    new_bvids = bvids_bilibili_un.split(",")
+    bvids.extend(new_bvids)
+
     
 def print_log(msg):
     # 直接print()在Docker中不会显示, 所以要家flush=True
@@ -66,6 +72,7 @@ def goPlay(url):
     #count < 30
     while True:
         try:
+            random.shuffle(reqdatas)
             #发起一个post请求，去请求这个页面，从而获得一次点击量
             for data in reqdatas:
                 stime = str(int(time.time()))
@@ -88,11 +95,11 @@ def goPlay(url):
             localtime = time.asctime( time.localtime(time.time()) )
             print_log(localtime)
             # 刷一次要休息100s, 即使有连接池貌似也不能随便刷, 你可以研究下
-            delay = random.randint(110,120)
+            delay = random.randint(400,420)
             time.sleep(delay)
         except Exception as e:
             print_log(e)
-            time.sleep(100)
+            time.sleep(400)
             print_log('over')
 
 url = "https://api.bilibili.com/x/click-interface/click/web/h5"
